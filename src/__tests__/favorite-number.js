@@ -3,11 +3,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { getQueriesForElement } from "@testing-library/dom";
 
-test("it renders input with 'Favorite Number' label", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<FavoriteNumber />, div);
-  const { getByLabelText } = getQueriesForElement(div);
+function render(ui) {
+  const container = document.createElement("div");
+  ReactDOM.render(ui, container);
+  const queries = getQueriesForElement(container);
 
+  return { container, ...queries };
+}
+
+test("it renders input with 'Favorite Number' label", () => {
+  const { getByLabelText } = render(<FavoriteNumber />);
   const input = getByLabelText(/Favorite Number/i);
   expect(input).toHaveAttribute("type", "number");
 });
