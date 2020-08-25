@@ -1,10 +1,8 @@
-import { axe, toHaveNoViolations } from "jest-axe";
-
 import React from "react";
+import { axe } from "jest-axe";
 import { render } from "@testing-library/react";
 
 const { InaccessibleForm } = require("../a11y");
-expect.extend(toHaveNoViolations);
 
 test("the form is accessible", async () => {
   const { container } = render(<InaccessibleForm />);
