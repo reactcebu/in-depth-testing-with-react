@@ -10,8 +10,13 @@ test("it renders input with 'Favorite Number' label", () => {
 });
 
 test("entering an invalid number shows 'The number is invalid'", () => {
-  const { getByLabelText, getByRole } = render(<FavoriteNumber />);
+  const { getByLabelText, getByRole, queryByRole, rerender } = render(
+    <FavoriteNumber />
+  );
   const input = getByLabelText(/Favorite Number/i);
   user.type(input, "10");
-  expect(getByRole("alert")).toHaveTextContent(/The number is invalid/);
+  expect(getByRole("alert")).toHaveTextContent(/the number is invalid/i);
+
+  rerender(<FavoriteNumber max={10} />);
+  expect(queryByRole("alert")).toBeNull();
 });
