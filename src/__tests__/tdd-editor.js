@@ -1,6 +1,7 @@
+import { fireEvent, render } from "@testing-library/react";
+
 import { Editor } from "../editor";
 import React from "react";
-import { render } from "@testing-library/react";
 
 test("it renders a form with title, content, tags, and a submit button", () => {
   const { getByLabelText, getByText } = render(<Editor />);
@@ -8,5 +9,9 @@ test("it renders a form with title, content, tags, and a submit button", () => {
   getByLabelText(/title/i);
   getByLabelText(/content/i);
   getByLabelText(/tags/i);
-  getByText(/submit/i);
+  const submit = getByText(/submit/i);
+
+  fireEvent.click(submit);
+
+  expect(submit).toBeDisabled();
 });
