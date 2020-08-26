@@ -4,6 +4,7 @@ import { savePost } from "./api";
 
 function Editor() {
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +16,9 @@ function Editor() {
       title: title.value,
       content: content.value,
       tags: tags.value.split(",").map((t) => t.trim()),
+    }).catch((response) => {
+      setIsSaving(false);
+      setError(response.data.error);
     });
   };
 
@@ -32,6 +36,7 @@ function Editor() {
       <button type="submit" disabled={isSaving}>
         Submit
       </button>
+      {error && <div role="alert">{error}</div>}
     </form>
   );
 }
