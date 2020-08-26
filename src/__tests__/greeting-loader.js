@@ -2,15 +2,15 @@ import { fireEvent, render, wait } from "@testing-library/react";
 
 import { GreetingLoader } from "../greeting-loader";
 import React from "react";
-import { loadGreeting } from "../api";
-
-jest.mock("../api");
 
 it("loads greeting on click", async () => {
   const inputValue = "Mary";
-  loadGreeting.mockResolvedValueOnce({ data: { greeting: inputValue } });
+  const mockedLoadGreeting = jest.fn();
+  mockedLoadGreeting.mockResolvedValueOnce({ data: { greeting: inputValue } });
 
-  const { getByLabelText, getByRole } = render(<GreetingLoader />);
+  const { getByLabelText, getByRole } = render(
+    <GreetingLoader loadGreeting={mockedLoadGreeting} />
+  );
   const input = getByLabelText(/name/i);
   const button = getByRole("button");
 
