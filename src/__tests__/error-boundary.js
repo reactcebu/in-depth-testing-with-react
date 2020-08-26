@@ -5,8 +5,17 @@ import { render } from "@testing-library/react";
 
 jest.mock("../api.js");
 
+beforeAll(() => {
+  jest.spyOn(console, "error").mockImplementation(() => {});
+});
+
 afterEach(() => {
   jest.clearAllMocks();
+});
+
+afterAll(() => {
+  console.error.mockRestore();
+  console.log("aluu!");
 });
 
 function Bomb({ shouldThrow }) {
@@ -34,4 +43,5 @@ it("calls reportError and renders error", () => {
   const error = expect.any(Error);
   const info = { componentStack: expect.stringContaining("Bomb") };
   expect(mockReportError).toHaveBeenCalledWith(error, info);
+  expect(console.error).toHaveBeenCalledTimes(2);
 });
