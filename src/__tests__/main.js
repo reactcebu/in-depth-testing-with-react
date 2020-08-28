@@ -18,3 +18,14 @@ test("main renders home and I can navigate to about", () => {
   userEvent.click(aboutLink);
   expect(getByRole("heading")).toHaveTextContent(/about/i);
 });
+
+test("navigating to a unregistered route lands on a bad page via no match component", () => {
+  const history = createMemoryHistory({ initialEntries: ["/fooo"] });
+  const { getByRole } = render(
+    <Router history={history}>
+      <Main />
+    </Router>
+  );
+
+  expect(getByRole("heading")).toHaveTextContent(/404/i);
+});
