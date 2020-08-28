@@ -26,7 +26,7 @@ function greetingReducer(state, action) {
   }
 }
 
-export default function Fetch({ url }) {
+function Fetch({ url }) {
   const [{ error, greeting }, dispatch] = useReducer(
     greetingReducer,
     initialState
@@ -38,7 +38,6 @@ export default function Fetch({ url }) {
       .get(url)
       .then((response) => {
         const { data } = response;
-        console.log(data);
         const { greeting } = data;
         dispatch({ type: "SUCCESS", greeting });
         setButtonClicked(true);
@@ -60,3 +59,5 @@ export default function Fetch({ url }) {
     </div>
   );
 }
+
+export { Fetch };

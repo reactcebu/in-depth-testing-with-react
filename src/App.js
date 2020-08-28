@@ -1,5 +1,5 @@
 import React from "react";
-import Fetch from "./fetch";
+import { Fetch } from "./fetch";
 
 function App() {
   return (
