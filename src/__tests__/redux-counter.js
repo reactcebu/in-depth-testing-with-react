@@ -8,13 +8,17 @@ import { reducer } from "../redux-reducer";
 
 function render(
   ui,
-  { initialState, store = createStore(reducer, initialState), ...options } = {}
+  {
+    initialState,
+    store = createStore(reducer, initialState),
+    ...rtlOptions
+  } = {}
 ) {
   function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>;
   }
 
-  return rtlRender(ui, { wrapper: Wrapper, ...options });
+  return rtlRender(ui, { wrapper: Wrapper, ...rtlOptions });
 }
 
 test("it can render Counter with redux defaults", () => {
