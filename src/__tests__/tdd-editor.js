@@ -17,16 +17,26 @@ const postBuilder = build("Post").fields({
   tags: fake((f) => [f.lorem.words(), f.lorem.words(), f.lorem.words()]),
 });
 
-test("it renders a form with title, content, tags, and a submit button", () => {
-  const { getByLabelText, getByText } = render(<Editor />);
-  mockSavePost.mockResolvedValueOnce();
+function renderEditor() {
+  const utils = render(<Editor />);
 
   const fakePost = postBuilder();
 
-  getByLabelText(/title/i).value = fakePost.title;
-  getByLabelText(/content/i).value = fakePost.content;
-  getByLabelText(/tags/i).value = fakePost.tags.join(", ");
-  const submit = getByText(/submit/i);
+  utils.getByLabelText(/title/i).value = fakePost.title;
+  utils.getByLabelText(/content/i).value = fakePost.content;
+  utils.getByLabelText(/tags/i).value = fakePost.tags.join(", ");
+  const submit = utils.getByText(/submit/i);
+
+  return {
+    fakePost,
+    submit,
+    ...utils,
+  };
+}
+
+test("it renders a form with title, content, tags, and a submit button", () => {
+  mockSavePost.mockResolvedValueOnce();
+  const { submit, fakePost } = renderEditor();
 
   fireEvent.click(submit);
 
@@ -36,8 +46,8 @@ test("it renders a form with title, content, tags, and a submit button", () => {
 });
 
 test("it renders error message from the server", async () => {
-  const { getByText, findByRole } = render(<Editor />);
   mockSavePost.mockRejectedValueOnce({ data: { error: "test error" } });
+  const { findByRole, getByText } = renderEditor();
 
   const submit = getByText(/submit/i);
 
