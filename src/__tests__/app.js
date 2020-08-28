@@ -1,5 +1,5 @@
 import React from "react";
-import { App } from "../app";
+import { App } from "../app-reach-router";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -10,25 +10,25 @@ jest.mock("../api");
 it("can fill out the form across multiple pages", async () => {
   mockSubmitForm.mockResolvedValueOnce({ success: true });
 
-  const { getByLabelText, getByText, getByRole, findByRole } = render(<App />);
+  const { findByLabelText, findByText, findByRole } = render(<App />);
 
   const testData = {
     drink: "Lemon",
     food: "hamburger",
   };
 
-  userEvent.click(getByText(/fill.*form/i));
+  userEvent.click(await findByText(/fill.*form/i));
 
-  userEvent.type(getByLabelText(/food/i), testData.food);
-  userEvent.click(getByText(/next/i));
+  userEvent.type(await findByLabelText(/food/i), testData.food);
+  userEvent.click(await findByText(/next/i));
 
-  userEvent.type(getByLabelText(/drink/i), testData.drink);
-  userEvent.click(getByText(/review/i));
+  userEvent.type(await findByLabelText(/drink/i), testData.drink);
+  userEvent.click(await findByText(/review/i));
 
-  expect(getByLabelText(/food/i)).toHaveTextContent(testData.food);
-  expect(getByLabelText(/drink/i)).toHaveTextContent(testData.drink);
+  expect(await findByLabelText(/food/i)).toHaveTextContent(testData.food);
+  expect(await findByLabelText(/drink/i)).toHaveTextContent(testData.drink);
 
-  userEvent.click(getByRole("button", { name: /confirm/i }));
+  userEvent.click(await findByRole("button", { name: /confirm/i }));
 
   expect(mockSubmitForm).toHaveBeenCalledTimes(1);
   expect(mockSubmitForm).toHaveBeenCalledWith(testData);
@@ -36,6 +36,6 @@ it("can fill out the form across multiple pages", async () => {
   const congratsHeading = await findByRole("heading", { name: /congrats/i });
   expect(congratsHeading).toHaveTextContent(/congrats/i);
 
-  userEvent.click(getByText(/go home/i));
-  expect(getByText(/welcome home/i)).toBeInTheDocument();
+  userEvent.click(await findByText(/go home/i));
+  expect(await findByText(/welcome home/i)).toBeInTheDocument();
 });
