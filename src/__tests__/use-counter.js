@@ -28,3 +28,15 @@ it("allows customization of the step", () => {
   act(() => result.current.increment());
   expect(result.current.count).toBe(4);
 });
+
+it("it allows step to be changed", () => {
+  const { result, rerender } = renderHook(useCounter, {
+    initialProps: { step: 3 },
+  });
+  expect(result.current.count).toBe(0);
+  act(() => result.current.increment());
+  expect(result.current.count).toBe(3);
+  rerender({ step: 2 });
+  act(() => result.current.increment());
+  expect(result.current.count).toBe(5);
+});
